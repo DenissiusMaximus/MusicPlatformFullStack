@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+@import "tailwindcss";
+
+* {
+    font-family: "Nunito", sans-serif;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none; /* IE, Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+
+:root {
+    --contexify-menu-bgColor: rgba(91, 84, 83, 0.75);
+    --contexify-item-color: #ffffff;
+    --contexify-activeItem-color: #ffffff;
+    --contexify-activeItem-bgColor: rgba(0, 0, 0, 0.25);
+
+    --contexify-arrow-color: #ffffff;
+    --contexify-activeArrow-color: #ffffff;
+
+    --contexify-menu-radius: 15px;
+    --contexify-item-radius: 15px;
+    --contexify-menu-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.contexify {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(10px);
+    margin: 6px;
+    border: none !important;
+}
