@@ -5,7 +5,7 @@ using MusicPlatform.Services;
 
 namespace MusicPlatform.Gql.Mutation;
 
-public class UserMutation(IUserRepo repo, IJwtService jwtService)
+public class UserMutation(IUserRepo repo, IJwtProvider jwtProvider)
 {
     public async Task<AuthentificationDto?> Register(string login, string email, string password,
         DateTime? birthDate)
@@ -14,7 +14,7 @@ public class UserMutation(IUserRepo repo, IJwtService jwtService)
     
         if (res == null) return null;
     
-        return new AuthentificationDto { Token = jwtService.GenerateToken(res.Value) };
+        return new AuthentificationDto { Token = jwtProvider.GenerateToken(res.Value) };
     }
     
     public async Task<AuthentificationDto?> Login(string login, string password)
@@ -23,7 +23,7 @@ public class UserMutation(IUserRepo repo, IJwtService jwtService)
     
         if (res?.UserId == null) return null;
     
-        return new AuthentificationDto { Token = jwtService.GenerateToken(res.UserId, res.Role) };
+        return new AuthentificationDto { Token = jwtProvider.GenerateToken(res.UserId, res.Role) };
     }
 
     public async Task<int?> CreateAdmin(string login, string email, string password, IResolveFieldContext context)

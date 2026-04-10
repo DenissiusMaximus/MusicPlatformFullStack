@@ -1,13 +1,13 @@
 ﻿namespace MusicPlatform.Services;
 
-public static class PasswordService
+public class PasswordHashProvider : IPasswordHashProvider
 {
-    public static string HashPassword(string password)
+    public string HashPassword(string password)
     {
         return BCrypt.Net.BCrypt.HashPassword(password);
     }
 
-    public static bool VerifyPassword(string password, string hashedPassword)
+    public bool VerifyPassword(string password, string hashedPassword)
     {
         return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
     }

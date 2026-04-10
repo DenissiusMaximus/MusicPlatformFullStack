@@ -5,7 +5,7 @@ using MusicPlatform.Services;
 
 namespace MusicPlatform.Gql;
 
-public class UserQuery(IUserRepo repo, IJwtService jwtService)
+public class UserQuery(IUserRepo repo, IJwtProvider jwtProvider)
 {
     public async Task<bool> IsUsernameAvailable(string username)
     {

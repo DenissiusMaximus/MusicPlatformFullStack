@@ -1,5 +1,4 @@
 using GraphQL;
-using GraphQL.Types;
 using MusicPlatform.DataAccess;
 using MusicPlatform.Gql;
 using MusicPlatform.Gql.Mutation;
@@ -15,6 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddScoped<ICollectionService, CollectionService>();
+
+builder.Services.AddSingleton<IPasswordHashProvider, PasswordHashProvider>();
+
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<ICollectionRepo, CollectionRepo>();
 builder.Services.AddScoped<ITrackRepo, TrackRepo>();
@@ -23,8 +26,8 @@ builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 builder.Services.AddScoped<IListenRepo, ListenRepo>();
 builder.Services.AddScoped<IGenreRepo, GenreRepo>();
 
-builder.Services.AddScoped<IJwtService, JwtService>();
-builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<IFileProvider, FileProvider>();
 
 builder.Services.AddScoped<CollectionQuery>();
 builder.Services.AddScoped<UserQuery>();
@@ -56,7 +59,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IDbConnectionFactory, SqlDbConnectionFactory>(sp =>
 {
     var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
-    var jwtService = sp.GetRequiredService<IJwtService>();
+    var jwtService = sp.GetRequiredService<IJwtProvider>();
     
     var context = httpContextAccessor.HttpContext;
     
@@ -93,7 +96,7 @@ builder.Services.AddGraphQL(b => b
         
         var token = http.HttpContext?.Items["JwtToken"] as string;
         
-        var jwtService = requestServices.GetRequiredService<IJwtService>();
+        var jwtService = requestServices.GetRequiredService<IJwtProvider>();
 
         if (token == null) return null;
         

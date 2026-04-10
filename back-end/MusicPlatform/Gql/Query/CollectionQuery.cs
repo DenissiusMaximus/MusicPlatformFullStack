@@ -5,7 +5,7 @@ using MusicPlatform.Services;
 
 namespace MusicPlatform.Gql;
 
-public class CollectionQuery(ICollectionRepo repo, FileService fileService)
+public class CollectionQuery(ICollectionRepo repo, FileProvider fileProvider)
 {
     public async Task<IEnumerable<CollectionDto>?> UserPlaylists(IResolveFieldContext context)
     {
@@ -18,16 +18,16 @@ public class CollectionQuery(ICollectionRepo repo, FileService fileService)
         foreach (var c in res)
         {
             if (c.IconLink is not null)
-                c.IconLink = fileService.SetFullUrl(c.IconLink);
+                c.IconLink = fileProvider.SetFullUrl(c.IconLink);
 
             if (c.Songs is null) continue;
 
             foreach (var s in c.Songs)
             {
                 if (s.TrackLink is not null)
-                    s.TrackLink = fileService.SetFullUrl(s.TrackLink);
+                    s.TrackLink = fileProvider.SetFullUrl(s.TrackLink);
                 if (s.IconLink is not null)
-                    s.IconLink = fileService.SetFullUrl(s.IconLink);
+                    s.IconLink = fileProvider.SetFullUrl(s.IconLink);
             }
         }
 
@@ -41,16 +41,16 @@ public class CollectionQuery(ICollectionRepo repo, FileService fileService)
         var res = await repo.GetCollectionById(id, userId);
 
         if (res is { IconLink: not null })
-            res.IconLink = fileService.SetFullUrl(res.IconLink);
+            res.IconLink = fileProvider.SetFullUrl(res.IconLink);
 
         if (res?.Songs is null) return res;
 
         foreach (var s in res.Songs)
         {
             if (s.TrackLink is null ) continue;
-            s.TrackLink = fileService.SetFullUrl(s.TrackLink);
+            s.TrackLink = fileProvider.SetFullUrl(s.TrackLink);
             if (s.IconLink is null ) continue;
-            s.IconLink = fileService.SetFullUrl(s.IconLink);
+            s.IconLink = fileProvider.SetFullUrl(s.IconLink);
         }
 
 

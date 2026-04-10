@@ -6,7 +6,7 @@ using MusicPlatform.Services;
 
 namespace MusicPlatform.Gql.Mutation;
 
-public class TrackMutation(ITrackRepo repo, FileService fileService)
+public class TrackMutation(ITrackRepo repo, IFileProvider fileProvider)
 {
     public async Task<bool> RemoveTrack(int trackId, IResolveFieldContext context)
     {
@@ -29,9 +29,9 @@ public class TrackMutation(ITrackRepo repo, FileService fileService)
         string? iconUrl = null;
         
         if (icon != null)
-            iconUrl = (await fileService.SaveFileAsync(icon, "icons")).Url;
+            iconUrl = (await fileProvider.SaveFileAsync(icon, "icons")).Url;
         
-        var audio = (await fileService.SaveFileAsync(audioFile, "audio"));
+        var audio = (await fileProvider.SaveFileAsync(audioFile, "audio"));
 
         releaseDate ??= DateTime.UtcNow;
         

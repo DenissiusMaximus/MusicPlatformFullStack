@@ -5,11 +5,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MusicPlatform.Services;
 
-public class JwtService : IJwtService
+public class JwtProvider : IJwtProvider
 {
     private readonly string _secret;
 
-    public JwtService(IConfiguration configuration)
+    public JwtProvider(IConfiguration configuration)
     {
         var secret = configuration.GetValue<string>("Jwt:Secret")
                      ?? throw new Exception("JWT refresh secret not found");

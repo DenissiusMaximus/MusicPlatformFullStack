@@ -5,7 +5,7 @@ using MusicPlatform.Services;
 
 namespace MusicPlatform.Gql;
 
-public class SearchQuery(ISearchRepo repo, FileService fileService)
+public class SearchQuery(ISearchRepo repo, FileProvider fileProvider)
 {
     public async Task<SearchDto> Search(string query, IResolveFieldContext context)
     {
@@ -16,13 +16,13 @@ public class SearchQuery(ISearchRepo repo, FileService fileService)
         foreach (var dto in res.Tracks)
         {
             if(dto.IconLink != null)
-                dto.IconLink = fileService.SetFullUrl(dto.IconLink);
+                dto.IconLink = fileProvider.SetFullUrl(dto.IconLink);
         }
 
         foreach (var dto in res.Collections)
         {
             if(dto.IconLink != null)
-                dto.IconLink = fileService.SetFullUrl(dto.IconLink);
+                dto.IconLink = fileProvider.SetFullUrl(dto.IconLink);
         }
 
         return res;

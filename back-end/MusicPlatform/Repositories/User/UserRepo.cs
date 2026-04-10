@@ -7,7 +7,7 @@ using MusicPlatform.Services;
 
 namespace MusicPlatform.Repositories;
 
-public class UserRepo(IDbConnectionFactory dbFactory) : IUserRepo
+public class UserRepo(IDbConnectionFactory dbFactory, IPasswordHashProvider passwordHashProvider) : IUserRepo
 {
     public async Task<bool> IsUsernameAvailable(string username)
     {
@@ -20,7 +20,7 @@ public class UserRepo(IDbConnectionFactory dbFactory) : IUserRepo
 
     public async Task<int?> CreateUser(string login, string email, string password, DateTime? birthDate)
     {
-        var passwordHash = PasswordService.HashPassword(password);
+        var passwordHash = passwordHashProvider.HashPassword(password);
 
         const string sql = @"INSERT INTO Users (Login, Email, PasswordHash, BirthDate) 
                              VALUES (@login, @email, @passwordHash, @birthDate)
@@ -44,7 +44,7 @@ public class UserRepo(IDbConnectionFactory dbFactory) : IUserRepo
     
     public async Task<int?> CreateAdmin(string login, string email, string password)
     {
-        var passwordHash = PasswordService.HashPassword(password);
+        var passwordHash = passwordHashProvider.HashPassword(password);
 
         const string sql = @"INSERT INTO Users (Login, Email, PasswordHash, Role) 
                              VALUES (@login, @email, @passwordHash, 'Admin')
@@ -75,7 +75,7 @@ public class UserRepo(IDbConnectionFactory dbFactory) : IUserRepo
         using var db = dbFactory.CreateConnection();
         var user = await db.QueryFirstOrDefaultAsync<User>(sql, new { login });
 
-        if (user != null && PasswordService.VerifyPassword(password, user.PasswordHash))
+        if (user != null && passwordHashProvider.VerifyPassword(password, user.PasswordHash))
             return user;
 
         return null;

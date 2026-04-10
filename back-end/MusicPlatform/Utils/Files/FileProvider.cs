@@ -3,7 +3,7 @@ using NAudio.Wave;
 
 namespace MusicPlatform.Services;
 
-public class FileService(IWebHostEnvironment env, IConfiguration configuration)
+public class FileProvider(IWebHostEnvironment env, IConfiguration configuration) : IFileProvider
 {
     public string SetFullUrl(string relativeUrl)
     {

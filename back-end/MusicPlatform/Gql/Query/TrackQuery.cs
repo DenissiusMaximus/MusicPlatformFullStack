@@ -6,14 +6,14 @@ using MusicPlatform.Services;
 
 namespace MusicPlatform.Gql.Query;
 
-public class TrackQuery(ITrackRepo repo, FileService fileService)
+public class TrackQuery(ITrackRepo repo, FileProvider fileProvider)
 {
     public async Task<TrackDto?> GetSingle(int id)
     {
         var track = await repo.GetById(id);
         
         
-        return fileService.SetFullUrl(track);
+        return fileProvider.SetFullUrl(track);
     }
     
     public async Task<IEnumerable<TrackDto>?> GetByUser(int userId)
@@ -22,7 +22,7 @@ public class TrackQuery(ITrackRepo repo, FileService fileService)
         
         if (tracks is null) return null;
         
-        tracks.ToList().ForEach(t => fileService.SetFullUrl(t));
+        tracks.ToList().ForEach(t => fileProvider.SetFullUrl(t));
         
         return tracks;
     }
